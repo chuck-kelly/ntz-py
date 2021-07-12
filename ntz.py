@@ -29,7 +29,7 @@ def get_args():
     data = load_json()
     nice_print(data)
   elif sys.argv[1] == 'r':
-    remeber()
+    remember()
   elif sys.argv[1] == '-c':
     create()
   elif sys.argv[1] == 'f':
@@ -52,8 +52,22 @@ def nice_print(data):
       print(v)
     print()
 
-def remeber():
-  pass
+def remember():
+  data = load_json()
+
+  if len(sys.argv) >= 3:
+    list_to_remember = sys.argv[2]
+    if list_to_remember in data:
+      new_dict ={list_to_remember:data[list_to_remember]}
+      nice_print(new_dict)
+  
+  else:
+    new_dict = {'Lists in storage':[]}
+    for key in data:
+      new_dict['Lists in storage'].append(key)
+    nice_print(new_dict)
+  
+
 
 def create():
   pass
