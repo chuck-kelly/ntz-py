@@ -33,7 +33,7 @@ def get_args():
   elif sys.argv[1] == '-c':
     create()
   elif sys.argv[1] == 'f':
-    forget
+    forget()
   elif sys.argv[1] == 'e':
     edit()
   elif sys.argv[1] == 'clear':
@@ -75,7 +75,9 @@ def create():
 
   if len(sys.argv) >= 3:
     new_list = sys.argv[2]
-    if new_list not in data:
+    if new_list == 'q':
+      print('\nq is a restricted work.\n')
+    elif new_list not in data:
       new_dict = {new_list:[]}
       data = data | new_dict
       dump_json(data)
@@ -83,17 +85,63 @@ def create():
       print("\nList already Exists.\n")
 
   else:
-    new_list = input("Name new list: ")
-    if new_list not in data:
-      new_dict = {new_list:[]}
-      data = data | new_dict
-      dump_json(data)
-    else:
-      print("\nList already Exists.\n")
+    while True:
+      new_list = input("Name new list: ")
+      if new_list == 'q':
+        print('\nq is a restricted work.\n')
+        break
+      elif new_list not in data:
+        new_dict = {new_list:[]}
+        data = data | new_dict
+        dump_json(data)
+        break
+      else:
+        print("\nList already Exists.\n")
 
 
 def forget():
-  pass
+
+  data = load_json()
+
+  if len(sys.argv) >= 3:
+    bye_list = sys.argv[2]
+
+    if bye_list == '_genral_list':
+      print('\nCannot Forget _genral_list.\n')
+
+    elif bye_list in data:
+      while True:
+        double_check = input('\nAre your sure you want to forget '+bye_list+' (y/n): ')
+        if double_check == 'y':
+          dump_json(data.pop(bye_list))
+          break
+        elif double_check == 'n':
+          break
+        else:
+          print('\nInvalid Command.')
+  else:
+    print()
+    for key in data:
+        print(key)
+    while True:
+      bye_list = input('\nWhat list to forget: ')
+      if bye_list == '_genral_list':
+        print('\nCannot Forget _genral_list.\n')
+      elif bye_list == 'q':
+        print()
+        break
+      elif bye_list in data:
+          double_check = input('\nAre your sure you want to forget '+bye_list+' (y/n): ')
+          if double_check == 'y':
+            dump_json(data.pop(bye_list))
+            break
+          elif double_check == 'n':
+            pass
+          else:
+            print('\nInvalid Command.')
+      else:
+        print('\nInvalid List.')
+
 
 def edit():
   data = load_json()
