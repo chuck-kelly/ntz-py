@@ -15,11 +15,13 @@ def load_json():
     data = json.load(file)
   return data
 
+
 #set new json data
 def dump_json(data):
   filepath = 'ntz.json'
   with open(filepath, 'w') as file:
     json.dump(data, file)
+
 
 def get_args():
   #check input from termial
@@ -44,13 +46,15 @@ def get_args():
     print('Invalid input.')
   #return sys.argv
 
+
 def nice_print(data):
   for key, values in data.items():
     print()
     print(key,':')
-    for v in values:
-      print(v)
     print()
+    for v in values:
+      print('-',v)
+
 
 def remember():
   data = load_json()
@@ -67,7 +71,6 @@ def remember():
       new_dict['Lists in storage'].append(key)
     nice_print(new_dict)
   
-
 
 def create():
 
@@ -119,10 +122,13 @@ def forget():
           break
         else:
           print('\nInvalid Command.')
+  elif len(data) == 1:
+    print('\nNo lists to forget.\n')
   else:
     print()
     for key in data:
-        print(key)
+        if key != '_genral_list':
+          print(key)
     while True:
       bye_list = input('\nWhat list to forget: ')
       if bye_list == '_genral_list':
@@ -195,8 +201,6 @@ def add(list_to_edit, data):
   dump_json(data)
   
 
-  
-
 def drop(list_to_edit, data):
   if len(sys.argv) >= 5:
     list_to_drop = sys.argv[4:]
@@ -219,15 +223,45 @@ def drop(list_to_edit, data):
   dump_json(data)
 
 
-  
-
-
-
 def clear():
-  pass
+
+  data = load_json()
+
+  if len(sys.argv) == 2:
+    while True:
+        choice = input('\nDelete all items in _genral_list (y/n):')
+        if choice == 'y':
+          data['_genral_list']=[]
+          dump_json(data)
+          break
+        elif choice == 'n':
+          break
+        else:
+          print('\nInvalid Command.')
+  elif len(sys.argv) >= 3:
+    clear_list = sys.argv[2]
+    if clear_list in data:
+      while True:
+        choice = input('\nDelete all items in '+clear_list+' (y/n):')
+        if choice == 'y':
+          data[clear_list]=[]
+          dump_json(data)
+          break
+        elif choice == 'n':
+          break
+        else:
+          print('\nInvalid Command.')
+    else:
+      print('\nInvalid Command.\n')
+
 
 def help():
-  pass
+  print('\nTo remember a list and items -> ntz r <list name>')
+  print('\nTo make a new list -> ntz -c <new list name>')
+  print('\nTo forget a list -> ntz f <list name>')
+  print('\nTo edit a list -> ntz e <list name> <add/drop> <item> <...> ...')
+  print('\nTo clear all items in a list -> ntz clear <list name>')
+  print('\n<> are optional commands.\n')
 
 # run the main function
 cli()
