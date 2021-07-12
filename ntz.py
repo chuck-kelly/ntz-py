@@ -70,7 +70,27 @@ def remember():
 
 
 def create():
-  pass
+
+  data = load_json()
+
+  if len(sys.argv) >= 3:
+    new_list = sys.argv[2]
+    if new_list not in data:
+      new_dict = {new_list:[]}
+      data = data | new_dict
+      dump_json(data)
+    else:
+      print("\nList already Exists.\n")
+
+  else:
+    new_list = input("Name new list: ")
+    if new_list not in data:
+      new_dict = {new_list:[]}
+      data = data | new_dict
+      dump_json(data)
+    else:
+      print("\nList already Exists.\n")
+
 
 def forget():
   pass
